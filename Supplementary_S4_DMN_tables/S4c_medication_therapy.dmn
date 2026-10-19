@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_CopdModular" name="COPD Modular Decision Services" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+  <decision id="Decision_AdherenceCheck" name="Check Adherence and Inhalation Technique">
+    <decisionTable id="DecisionTable_Adherence">
+      <input id="Input_Adh_1" label="Good Adherence?">
+        <inputExpression id="InputExpr_Adh_1" typeRef="boolean">
+          <text>goodAdherence</text>
+        </inputExpression>
+      </input>
+      <input id="Input_Adh_2" label="Correct Inhalation Technique?">
+        <inputExpression id="InputExpr_Adh_2" typeRef="boolean">
+          <text>correctInhalationTechnique</text>
+        </inputExpression>
+      </input>
+      <output id="Output_Adh_1" label="Escalation Allowed" name="escalationAllowed" typeRef="boolean" />
+      <output id="Output_Adh_2" label="Required Action" name="adherenceAction" typeRef="string" />
+      <rule id="Rule_Adh_1">
+        <inputEntry id="Test_Adh_1_1">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Test_Adh_1_2">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="Lit_Adh_1_1">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="Lit_Adh_1_2">
+          <text>"Proceed to pretreatment evaluation"</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_Adh_2">
+        <inputEntry id="Test_Adh_2_1">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Test_Adh_2_2">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="Lit_Adh_2_1">
+          <text>false</text>
+        </outputEntry>
+        <outputEntry id="Lit_Adh_2_2">
+          <text>"Train inhalation technique and re-evaluate later"</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_Adh_3">
+        <inputEntry id="Test_Adh_3_1">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Test_Adh_3_2">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="Lit_Adh_3_1">
+          <text>false</text>
+        </outputEntry>
+        <outputEntry id="Lit_Adh_3_2">
+          <text>"Counsel patient on adherence and re-evaluate later"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_IcsIndication" name="Check ICS Indication Before Triple Therapy">
+    <decisionTable id="DecisionTable_Ics">
+      <input id="Input_Ics_1" label="Eosinophils (cells/µl)">
+        <inputExpression id="InputExpr_Ics_1" typeRef="integer">
+          <text>eosinophils</text>
+        </inputExpression>
+      </input>
+      <input id="Input_Ics_2" label="Asthma Component?">
+        <inputExpression id="InputExpr_Ics_2" typeRef="boolean">
+          <text>asthmaComponent</text>
+        </inputExpression>
+      </input>
+      <output id="Output_Ics_1" label="ICS Indicated" name="icsIndicated" typeRef="boolean" />
+      <rule id="Rule_Ics_1">
+        <inputEntry id="Test_Ics_1_1">
+          <text>&gt;= 300</text>
+        </inputEntry>
+        <inputEntry id="Test_Ics_1_2">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="Lit_Ics_1_1">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_Ics_2">
+        <inputEntry id="Test_Ics_2_1">
+          <text>&lt; 300</text>
+        </inputEntry>
+        <inputEntry id="Test_Ics_2_2">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="Lit_Ics_2_1">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_Ics_3">
+        <inputEntry id="Test_Ics_3_1">
+          <text>&lt; 300</text>
+        </inputEntry>
+        <inputEntry id="Test_Ics_3_2">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="Lit_Ics_3_1">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_IcsReview" name="Review ICS Indication">
+    <decisionTable id="DecisionTable_Review" hitPolicy="FIRST">
+      <input id="Input_Rev_1" label="Eosinophils (cells/µl)">
+        <inputExpression id="InputExpr_Rev_1" typeRef="integer">
+          <text>eosinophils</text>
+        </inputExpression>
+      </input>
+      <input id="Input_Rev_2" label="Pneumonia Under ICS?">
+        <inputExpression id="InputExpr_Rev_2" typeRef="boolean">
+          <text>pneumoniaUnderIcs</text>
+        </inputExpression>
+      </input>
+      <input id="Input_Rev_3" label="Asthma Component?">
+        <inputExpression id="InputExpr_Rev_3" typeRef="boolean">
+          <text>asthmaComponent</text>
+        </inputExpression>
+      </input>
+      <output id="Output_Rev_1" label="Maintain ICS" name="maintainIcs" typeRef="boolean" />
+      <rule id="Rule_Rev_1">
+        <description>Pneumonia complication under ICS</description>
+        <inputEntry id="Test_Rev_1_1">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Test_Rev_1_2">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Test_Rev_1_3">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="Lit_Rev_1_1">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_Rev_2">
+        <description>Eosinophils &lt; 100 cells/µl and no asthma</description>
+        <inputEntry id="Test_Rev_2_1">
+          <text>&lt; 100</text>
+        </inputEntry>
+        <inputEntry id="Test_Rev_2_2">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Test_Rev_2_3">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="Lit_Rev_2_1">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_Rev_3">
+        <description>Eosinophils &gt;= 100 cells/µl (covers intermediate and high benefit range)</description>
+        <inputEntry id="Test_Rev_3_1">
+          <text>&gt;= 100</text>
+        </inputEntry>
+        <inputEntry id="Test_Rev_3_2">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Test_Rev_3_3">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="Lit_Rev_3_1">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_Rev_4">
+        <description>Asthma component protection rule</description>
+        <inputEntry id="Test_Rev_4_1">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Test_Rev_4_2">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Test_Rev_4_3">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="Lit_Rev_4_1">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_CopdModular">
+      <dmndi:DMNShape id="DMNShape_AdherenceCheck" dmnElementRef="Decision_AdherenceCheck">
+        <dc:Bounds height="80" width="180" x="150" y="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_IcsIndication" dmnElementRef="Decision_IcsIndication">
+        <dc:Bounds height="80" width="180" x="380" y="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_IcsReview" dmnElementRef="Decision_IcsReview">
+        <dc:Bounds height="80" width="180" x="610" y="80" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

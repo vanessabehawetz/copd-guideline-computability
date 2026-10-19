@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_024bacs" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Web Modeler" exporterVersion="dc1bfde" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+  <decision id="Decision_e_cigarette_eligibility" name="Determine e-cigarette eligibility">
+    <decisionTable id="DecisionTable_e_cigarette_eligibility" hitPolicy="FIRST">
+      <input id="Input_primary_cessation_attempt">
+        <inputExpression id="InputExpression_primary_cessation_attempt" typeRef="boolean">
+          <text>primary_cessation_attempt</text>
+        </inputExpression>
+      </input>
+      <input id="Input_documented_failure_or_refusal">
+        <inputExpression id="InputExpression_documented_failure_or_refusal" typeRef="boolean">
+          <text>documented_failure_or_refusal</text>
+        </inputExpression>
+      </input>
+      <input id="Input_risk_counseling_completed">
+        <inputExpression id="InputExpression_risk_counseling_completed" typeRef="boolean">
+          <text>risk_counseling_completed</text>
+        </inputExpression>
+      </input>
+      <input id="Input_simultaneous_tobacco_cessation">
+        <inputExpression id="InputExpression_simultaneous_tobacco_cessation" typeRef="boolean">
+          <text>simultaneous_tobacco_cessation</text>
+        </inputExpression>
+      </input>
+      <input id="Input_continuous_monitoring_planned">
+        <inputExpression id="InputExpression_continuous_monitoring_planned" typeRef="boolean">
+          <text>continuous_monitoring_planned</text>
+        </inputExpression>
+      </input>
+      <output id="Output_eligibility_result" label="Eligibility result" name="e_cigarette_eligibility_result" typeRef="string" />
+      <output id="Output_reason" label="Reason" name="reason" typeRef="string" />
+      <rule id="Rule_1_primary_cessation_attempt">
+        <description>E-cigarette is intended as primary cessation attempt.</description>
+        <inputEntry id="Rule_1_Input_primary">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_1_Input_documented_failure">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Rule_1_Input_risk_counseling">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Rule_1_Input_tobacco_cessation">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Rule_1_Input_monitoring">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="Rule_1_Output_result">
+          <text>"Do not initiate"</text>
+        </outputEntry>
+        <outputEntry id="Rule_1_Output_reason">
+          <text>"E-cigarette is not an option for a primary cessation attempt."</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_2_no_documented_failure_or_refusal">
+        <description>No documented failure or refusal of other evidence-based measures.</description>
+        <inputEntry id="Rule_2_Input_primary">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Rule_2_Input_documented_failure">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Rule_2_Input_risk_counseling">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Rule_2_Input_tobacco_cessation">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Rule_2_Input_monitoring">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="Rule_2_Output_result">
+          <text>"Do not initiate"</text>
+        </outputEntry>
+        <outputEntry id="Rule_2_Output_reason">
+          <text>"Failure or refusal of other evidence-based measures is not documented."</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_3_risk_counseling_not_completed">
+        <description>Risk counseling has not been completed.</description>
+        <inputEntry id="Rule_3_Input_primary">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Rule_3_Input_documented_failure">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_3_Input_risk_counseling">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Rule_3_Input_tobacco_cessation">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Rule_3_Input_monitoring">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="Rule_3_Output_result">
+          <text>"Do not initiate"</text>
+        </outputEntry>
+        <outputEntry id="Rule_3_Output_reason">
+          <text>"Risk counseling has not been completed."</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_4_no_simultaneous_tobacco_cessation">
+        <description>Simultaneous termination of tobacco use is not confirmed.</description>
+        <inputEntry id="Rule_4_Input_primary">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Rule_4_Input_documented_failure">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_4_Input_risk_counseling">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_4_Input_tobacco_cessation">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Rule_4_Input_monitoring">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="Rule_4_Output_result">
+          <text>"Do not initiate"</text>
+        </outputEntry>
+        <outputEntry id="Rule_4_Output_reason">
+          <text>"Simultaneous termination of tobacco use is not confirmed."</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_5_no_continuous_monitoring">
+        <description>Continuous medical monitoring and support is not planned.</description>
+        <inputEntry id="Rule_5_Input_primary">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Rule_5_Input_documented_failure">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_5_Input_risk_counseling">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_5_Input_tobacco_cessation">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_5_Input_monitoring">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="Rule_5_Output_result">
+          <text>"Do not initiate"</text>
+        </outputEntry>
+        <outputEntry id="Rule_5_Output_reason">
+          <text>"Continuous medical monitoring and support is not planned."</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_6_all_prerequisites_fulfilled">
+        <description>All mandatory prerequisites are fulfilled.</description>
+        <inputEntry id="Rule_6_Input_primary">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Rule_6_Input_documented_failure">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_6_Input_risk_counseling">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_6_Input_tobacco_cessation">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_6_Input_monitoring">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="Rule_6_Output_result">
+          <text>"May consider under strict conditions"</text>
+        </outputEntry>
+        <outputEntry id="Rule_6_Output_reason">
+          <text>"All mandatory prerequisites are fulfilled."</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1">
+      <dmndi:DMNShape id="DMNShape_e_cigarette_eligibility" dmnElementRef="Decision_e_cigarette_eligibility">
+        <dc:Bounds height="80" width="260" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

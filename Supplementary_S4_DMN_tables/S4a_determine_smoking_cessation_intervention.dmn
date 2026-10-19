@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" id="Definitions_smoking_cessation_copd_v2" name="Smoking Cessation Intervention (COPD) v2" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Web Modeler" exporterVersion="dc1bfde" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+  <decision id="Decision_smoking_cessation_intervention" name="Determine smoking cessation intervention">
+    <decisionTable id="DecisionTable_smoking_cessation_intervention" hitPolicy="FIRST">
+      <input id="Input_motivation_level" biodi:width="150">
+        <inputExpression id="InputExpression_motivation_level" typeRef="string">
+          <text>motivation_level</text>
+        </inputExpression>
+        <inputValues id="InputValues_motivation_level">
+          <text>"low","high"</text>
+        </inputValues>
+      </input>
+      <input id="Input_consent_to_therapy" biodi:width="150">
+        <inputExpression id="InputExpression_consent_to_therapy" typeRef="boolean">
+          <text>consent_to_therapy</text>
+        </inputExpression>
+      </input>
+      <input id="Input_intensive_cbt_feasible">
+        <inputExpression id="InputExpression_intensive_cbt_feasible" typeRef="boolean">
+          <text>intensive_cbt_feasible</text>
+        </inputExpression>
+      </input>
+      <input id="Input_prior_cessation_attempt">
+        <inputExpression id="InputExpression_prior_cessation_attempt" typeRef="boolean">
+          <text>prior_cessation_attempt</text>
+        </inputExpression>
+      </input>
+      <output id="Output_intervention" label="Intervention" name="intervention" typeRef="string" />
+      <output id="Output_recommendation_grade" label="Recommendation grade" name="recommendation_grade" typeRef="string" />
+      <rule id="Rule_1_no_consent">
+        <description>No consent. Respect patient autonomy.</description>
+        <inputEntry id="Rule_1_Input_motivation">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Rule_1_Input_consent">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Rule_1_Input_cbt_feasible">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Rule_1_Input_prior">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="Rule_1_Output_intervention">
+          <text>"No therapy initiated"</text>
+        </outputEntry>
+        <outputEntry id="Rule_1_Output_grade">
+          <text>"-"</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_2_low_motivation_no_prior">
+        <description>Low motivation, first contact. Build intrinsic motivation.</description>
+        <inputEntry id="Rule_2_Input_motivation">
+          <text>"low"</text>
+        </inputEntry>
+        <inputEntry id="Rule_2_Input_consent">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_2_Input_cbt_feasible">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Rule_2_Input_prior">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="Rule_2_Output_intervention">
+          <text>"Motivational interviewing + offer therapy"</text>
+        </outputEntry>
+        <outputEntry id="Rule_2_Output_grade">
+          <text>"strong (Rec. 3-2, 3-3)"</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_3_low_motivation_prior">
+        <description>Low motivation, prior failed attempt. Re-engage patient.</description>
+        <inputEntry id="Rule_3_Input_motivation">
+          <text>"low"</text>
+        </inputEntry>
+        <inputEntry id="Rule_3_Input_consent">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_3_Input_cbt_feasible">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="Rule_3_Input_prior">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="Rule_3_Output_intervention">
+          <text>"Motivational interviewing + renew therapy offer"</text>
+        </outputEntry>
+        <outputEntry id="Rule_3_Output_grade">
+          <text>"strong (Rec. 3-2, 3-3)"</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_4_high_motivation_cbt_no_prior">
+        <description>First attempt, motivated, intensive CBT available.</description>
+        <inputEntry id="Rule_4_Input_motivation">
+          <text>"high"</text>
+        </inputEntry>
+        <inputEntry id="Rule_4_Input_consent">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_4_Input_cbt_feasible">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_4_Input_prior">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="Rule_4_Output_intervention">
+          <text>"Combined therapy (CBT + pharmacotherapy)"</text>
+        </outputEntry>
+        <outputEntry id="Rule_4_Output_grade">
+          <text>"strong (Rec. 3-4)"</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_5_high_motivation_cbt_prior">
+        <description>Prior failed attempt, motivated, intensive CBT available.</description>
+        <inputEntry id="Rule_5_Input_motivation">
+          <text>"high"</text>
+        </inputEntry>
+        <inputEntry id="Rule_5_Input_consent">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_5_Input_cbt_feasible">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_5_Input_prior">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="Rule_5_Output_intervention">
+          <text>"Repeat combined therapy (CBT + pharmacotherapy)"</text>
+        </outputEntry>
+        <outputEntry id="Rule_5_Output_grade">
+          <text>"strong (Rec. 3-4)"</text>
+        </outputEntry>
+      </rule>
+      <rule id="Rule_6_high_motivation_no_cbt">
+        <description>Motivated, but intensive CBT not accessible.</description>
+        <inputEntry id="Rule_6_Input_motivation">
+          <text>"high"</text>
+        </inputEntry>
+        <inputEntry id="Rule_6_Input_consent">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="Rule_6_Input_cbt_feasible">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="Rule_6_Input_prior">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="Rule_6_Output_intervention">
+          <text>"Brief counseling / telephone / online programme"</text>
+        </outputEntry>
+        <outputEntry id="Rule_6_Output_grade">
+          <text>"moderate (Rec. 3-5)"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1">
+      <dmndi:DMNShape id="DMNShape_smoking_cessation_intervention" dmnElementRef="Decision_smoking_cessation_intervention">
+        <dc:Bounds height="80" width="300" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
